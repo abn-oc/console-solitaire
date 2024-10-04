@@ -1,10 +1,11 @@
+#pragma once
 #include<iostream>
 using namespace std;
 
 template <typename T>
 class List {
 private:
-	
+
 	class Node {
 	public:
 		T data;
@@ -13,10 +14,37 @@ private:
 		Node(T val, Node* nxt, Node* prv) { data = val; next = nxt; prev = prv; }
 	};
 
+	class Iterator {
+	private:
+		Node* itr;
+	public:
+		friend class List;
+		Iterator(Node* it = nullptr) { itr = it; }
+		Iterator& operator++() {
+			if (itr) itr = itr->next;
+			return *this;
+		}
+		Iterator& operator--() {
+			if (itr) itr = itr->prev;
+			return *this;
+		}
+		Node* getNode() { return itr; }
+		T& operator*() {
+			return itr->data;
+		}
+		bool operator==(const Iterator b) {
+			return itr == b.itr;
+		}
+		bool operator!=(const Iterator b) {
+			return !(itr == b.itr);
+		}
+	};
+
 	Node* head;
 	Node* tail;
 
 public:
+	typedef Iterator iter;
 	List() {
 		head = nullptr;
 		tail = nullptr;
@@ -87,5 +115,8 @@ public:
 			tail->next = nullptr;
 			delete temp;
 		}
+	}
+	T headItem() {
+		return head->data;
 	}
 };

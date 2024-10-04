@@ -1,20 +1,17 @@
 #include<iostream>
 #include"List.h"
+#include"Stack.h"
+#include"Card.h"
+#include"Command.h"
 using namespace std;
 
 int main() {
 	cout << "Program Started." << endl;
 	{
-		List<int> l;
-		cout << "Empty? " << l.isEmpty() << endl;
-		l.insertAtStart(2);
-		l.insertAtStart(1);
-		l.insertAtEnd(3);
-		cout << "Empty? " << l.isEmpty() << endl;
-		l.Print();
-		l.deleteFromStart();
-		l.deleteFromEnd();
-		l.Print();
+		Command c;
+		Command a;
+		Command b;
+		Command e;
 	}
 	cout << "Program Ended." << endl;
 	cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << endl;
