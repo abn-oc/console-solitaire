@@ -93,9 +93,14 @@ public:
 					if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'c') {
 						int sc = (lastCommand.getSource()[1] - '0') - 1;
 						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						Stack<Card> movingCards;
 						for (int i = 0; i < lastCommand.getNum(); i++) {
-							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
-							ListtoList(tableu[dc], tableu[sc]);
+							movingCards.Push(tableu[dc].tailItem());
+							tableu[dc].deleteFromEnd();
+						}
+						if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
+						for (int i = 0; i < lastCommand.getNum(); i++) {
+							StacktoList(movingCards, tableu[sc]);
 						}
 						break;
 					}
@@ -143,20 +148,29 @@ public:
 				if (command.getSource()[0] == 'c' && command.getDest()[0] == 'c') {
 					int sc = (command.getSource()[1] - '0') - 1;
 					int dc = (command.getDest()[1] - '0') - 1;
+					Stack<Card> movingCards;
+					for (int i = 0; i < command.getNum(); i++) {
+						if (!tableu[sc].tailItem().isVisible()) {
+							cout << "Invalid Move. ";
+							continue;
+						}
+						movingCards.Push(tableu[sc].tailItem());
+						tableu[sc].deleteFromEnd();
+					}
 					bool valid = true;
 					if (tableu[dc].isEmpty()) {
-						if (tableu[sc].tailItem().getRank() != 13) {
+						if (movingCards.topItem().getRank() != 13) {
 							valid = false;
 						}
 					}
-					if (tableu[sc].tailItem().getRank() != tableu[dc].tailItem().getRank() - 1) {
+					if (movingCards.topItem().getRank() != tableu[dc].tailItem().getRank() - 1) {
 						valid = false;
 					}
-					if ((tableu[sc].tailItem().getSuite() == 's' || tableu[sc].tailItem().getSuite() == 'c')
+					if ((movingCards.topItem().getSuite() == 's' || movingCards.topItem().getSuite() == 'c')
 						&& (tableu[dc].tailItem().getSuite() == 'c' || tableu[dc].tailItem().getSuite() == 's')) {
 						valid = false;
 					}
-					else if ((tableu[sc].tailItem().getSuite() == 'h' && tableu[sc].tailItem().getSuite() == 'd')
+					else if ((movingCards.topItem().getSuite() == 'h' && movingCards.topItem().getSuite() == 'd')
 						     && (tableu[dc].tailItem().getSuite() == 'd' && tableu[dc].tailItem().getSuite() == 'h')) {
 						valid = false;
 					}
@@ -168,17 +182,9 @@ public:
 						cout << "Error in Commmand. ";
 						continue;
 					}
-					List<Card>::iter itr = tableu[sc].begin();
-					for (int i = 0; i < tableu[sc].Size() - command.getNum(); i++) {
-						++itr;
-					}
-					for (int i = 0; i < command.getNum(); i++) {
-						if (!itr.getNode()->data.isVisible()) valid = false;
-						++itr;
-					}
 					if(valid)
 						for (int i = 0; i < command.getNum(); i++) {
-							ListtoList(tableu[sc], tableu[dc]);
+							StacktoList(movingCards, tableu[dc]);
 							commands.Push(command);
 							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
 						}
@@ -191,14 +197,23 @@ public:
 				else if (command.getSource()[0] == 'c' && command.getDest()[0] == 'f') {
 					int sc = (command.getSource()[1] - '0') - 1;
 					int dc = (command.getDest()[1] - '0') - 1;
+					Stack<Card> movingCards;
+					for (int i = 0; i < command.getNum(); i++) {
+						if (!tableu[sc].tailItem().isVisible()) {
+							cout << "Invalid Move. ";
+							continue;
+						}
+						movingCards.Push(tableu[sc].tailItem());
+						tableu[sc].deleteFromEnd();
+					}
 					bool valid = true;
-					if (foundation[dc].isEmpty() && tableu[sc].tailItem().getRank() != 1) {
+					if (foundation[dc].isEmpty() && movingCards.topItem().getRank() != 1) {
 						valid = false;
 					}
-					if (!foundation[dc].isEmpty() && tableu[sc].tailItem().getRank() != foundation[dc].topItem().getRank() + 1) {
+					if (!foundation[dc].isEmpty() && movingCards.topItem().getRank() != foundation[dc].topItem().getRank() + 1) {
 						valid = false;
 					}
-					if (!foundation[dc].isEmpty() && tableu[sc].tailItem().getSuite() != foundation[dc].topItem().getSuite()) {
+					if (!foundation[dc].isEmpty() && movingCards.topItem().getSuite() != foundation[dc].topItem().getSuite()) {
 						valid = false;
 					}
 					if (!valid) {
@@ -209,17 +224,9 @@ public:
 						cout << "Error in Commmand. ";
 						continue;
 					}
-					List<Card>::iter itr = tableu[sc].begin();
-					for (int i = 0; i < tableu[sc].Size() - command.getNum(); i++) {
-						++itr;
-					}
-					for (int i = 0; i < command.getNum(); i++) {
-						if (!itr.getNode()->data.isVisible()) valid = false;
-						++itr;
-					}
 					if (valid)
 						for (int i = 0; i < command.getNum(); i++) {
-							ListtoStack(tableu[sc], foundation[dc]);
+							StacktoList(movingCards, tableu[dc]);
 							commands.Push(command);
 							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
 						}
