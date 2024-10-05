@@ -3,17 +3,19 @@
 #include"Stack.h"
 #include"Card.h"
 #include"Command.h"
+#include"Game.h"
 using namespace std;
 
 int main() {
-	cout << "Program Started." << endl;
+	cout << "S O L I T A I R E" << endl;
+	cout << "----------------------------------------------------------------------------------------------------------\n";
 	{
-		Command c;
-		Command a;
-		Command b;
-		Command e;
+		Game solitaire;
+		solitaire.Setup();
+		solitaire.Print();
 	}
-	cout << "Program Ended." << endl;
+	cout << "----------------------------------------------------------------------------------------------------------\n";
+	cout << "S O L I T A I R E" << endl;
 	cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << endl;
 	return 0;
 }

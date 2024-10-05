@@ -17,12 +17,16 @@ public:
 		return temp;
 	}
 	T topItem() {
-		return list.headItem();
+		if (!list.isEmpty())return list.headItem();
+		else return T();
 	}
 	bool isEmpty() {
 		return list.isEmpty();
 	}
 	void Print() {
 		list.Print();
+	}
+	int Size() {
+		return list.Size();
 	}
 };

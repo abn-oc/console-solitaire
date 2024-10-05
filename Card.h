@@ -14,6 +14,10 @@ public:
 		visible = v;
 	}
 	friend ostream& operator<<(ostream& cout, Card card) {
+		if (!card.isVisible()) {
+			cout << "[ ]";
+			return cout;
+		}
 		string rank;
 		string suite;
 		if (card.rank == 1) rank = "A ";

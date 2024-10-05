@@ -117,6 +117,27 @@ public:
 		}
 	}
 	T headItem() {
-		return head->data;
+		if (head) return head->data;
+		else return T();
+	}
+	iter begin() {
+		Iterator result;
+		result.itr = head;
+		return result;
+	}
+	iter end() {
+		Iterator result;
+		result.itr = nullptr;
+		return result;
+	}
+	int Size() {
+		if (isEmpty()) return 0;
+		int size = 0;
+		Node* curr = head;
+		while (curr != nullptr) {
+			curr = curr->next;
+			size++;
+		}
+		return size;
 	}
 };
