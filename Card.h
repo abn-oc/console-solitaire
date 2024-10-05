@@ -51,4 +51,10 @@ public:
 	void hide() {
 		visible = false;
 	}
+	char getSuite() {
+		return suite;
+	}
+	int getRank() {
+		return rank;
+	}
 };

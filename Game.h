@@ -60,7 +60,6 @@ public:
 	}
 	void ListtoList(List<Card>& src, List<Card>& des) {
 		Card drawnCard = src.tailItem();
-		//drawnCard.show();
 		src.deleteFromEnd();
 		des.insertAtEnd(drawnCard);
 	}
@@ -74,81 +73,237 @@ public:
 		des.insertAtEnd(drawnCard);
 	}
 	void Process() {
-		Command command;
-		command.getInput();
-		//if(z then call undo function) - takes last command and inverts it
-		if (command.getCommand() == 'z') {
-			Command lastCommand = commands.Pop();
-			if (lastCommand.getCommand() == 's') {
-				StacktoStack(waste, stock);
-				if (waste.isEmpty() && !commands.isEmpty()) {
-					int len = stock.Size();
-					for (int i = 0; i < len; i++) {
-						StacktoStack(stock, waste);
-					}
-				}
-			}
-			else if (lastCommand.getCommand() == 'm') {
-				if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'c') {
-					int sc = (lastCommand.getSource()[1] - '0') - 1;
-					int dc = (lastCommand.getDest()[1] - '0') - 1;
-					for (int i = 0; i < lastCommand.getNum(); i++) {
-						if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
-						ListtoList(tableu[dc], tableu[sc]);
-					}
-				}
-				else if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'f') {
-					int sc = (lastCommand.getSource()[1] - '0') - 1;
-					int dc = (lastCommand.getDest()[1] - '0') - 1;
-					for (int i = 0; i < lastCommand.getNum(); i++) {
-						tableu[sc].tailItem().hide();
-						StacktoList(foundation[dc], tableu[sc]);
-					}
-				}
-			}
-		}
-		//if(s then call drawFromstock function) - pop from stock push to waste
-		if (command.getCommand() == 's') {
-			if (stock.isEmpty()) {
-				int len = waste.Size();
-				for (int i = 0; i < len; i++) {
+		while (1) {
+			Command command;
+			command.getInput();
+			//if(z then call undo function) - takes last command and inverts it
+			if (command.getCommand() == 'z') {
+				Command lastCommand = commands.Pop();
+				if (lastCommand.getCommand() == 's') {
 					StacktoStack(waste, stock);
-				}
-				StacktoStack(stock, waste);
-				commands.Push(command);
-			}
-			else {
-				StacktoStack(stock, waste);
-				commands.Push(command);
-			}
-		}
-		//if(m) then take out source dest and num of cards
-		//call move function with source dest and num as args - check if placing is right, then do, otherwise dont
-		if (command.getCommand() == 'm') {
-			if (command.getSource()[0] == 'c' && command.getDest()[0] == 'c') {
-				int sc = (command.getSource()[1] - '0') - 1;
-				int dc = (command.getDest()[1] - '0') - 1;
-				for (int i = 0; i < command.getNum(); i++) {
-					if (!tableu[sc].tailItem().isVisible()) {
-						cout << "\nInvalid Command.";
-						return;
+					if (waste.isEmpty() && !commands.isEmpty()) {
+						int len = stock.Size();
+						for (int i = 0; i < len; i++) {
+							StacktoStack(stock, waste);
+						}
 					}
-					ListtoList(tableu[sc], tableu[dc]);
-					commands.Push(command);
-					if(!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
+					break;
+				}
+				else if (lastCommand.getCommand() == 'm') {
+					if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'c') {
+						int sc = (lastCommand.getSource()[1] - '0') - 1;
+						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						for (int i = 0; i < lastCommand.getNum(); i++) {
+							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
+							ListtoList(tableu[dc], tableu[sc]);
+						}
+						break;
+					}
+					else if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'f') {
+						int sc = (lastCommand.getSource()[1] - '0') - 1;
+						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						for (int i = 0; i < lastCommand.getNum(); i++) {
+							tableu[sc].tailItem().hide();
+							StacktoList(foundation[dc], tableu[sc]);
+						}
+						break;
+					}
+					else if (lastCommand.getSource()[0] == 'w' && lastCommand.getDest()[0] == 'c') {
+						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						ListtoStack(tableu[dc], waste);
+						break;
+					}
+					else if (lastCommand.getSource()[0] == 'w' && lastCommand.getDest()[0] == 'f') {
+						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						StacktoStack(foundation[dc], waste);
+						break;
+					}
 				}
 			}
-			else if (command.getSource()[0] == 'c' && command.getDest()[0] == 'f') {
-				int sc = (command.getSource()[1] - '0') - 1;
-				int dc = (command.getDest()[1] - '0') - 1;
-				for (int i = 0; i < command.getNum(); i++) {
-					if (!tableu[sc].tailItem().isVisible()) {
-						cout << "\nInvalid Command.";
-						return;
+			//if(s then call drawFromstock function) - pop from stock push to waste
+			if (command.getCommand() == 's') {
+				if (stock.isEmpty()) {
+					int len = waste.Size();
+					for (int i = 0; i < len; i++) {
+						StacktoStack(waste, stock);
 					}
-					ListtoStack(tableu[sc], foundation[dc]);
+					StacktoStack(stock, waste);
 					commands.Push(command);
-					if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
+					break;
+				}
+				else {
+					StacktoStack(stock, waste);
+					commands.Push(command);
+					break;
+				}
+			}
+			//if(m) then take out source dest and num of cards
+			//call move function with source dest and num as args - check if placing is right, then do, otherwise dont
+			if (command.getCommand() == 'm') {
+				if (command.getSource()[0] == 'c' && command.getDest()[0] == 'c') {
+					int sc = (command.getSource()[1] - '0') - 1;
+					int dc = (command.getDest()[1] - '0') - 1;
+					bool valid = true;
+					if (tableu[dc].isEmpty()) {
+						if (tableu[sc].tailItem().getRank() != 13) {
+							valid = false;
+						}
+					}
+					if (tableu[sc].tailItem().getRank() != tableu[dc].tailItem().getRank() - 1) {
+						valid = false;
+					}
+					if ((tableu[sc].tailItem().getSuite() == 's' || tableu[sc].tailItem().getSuite() == 'c')
+						&& (tableu[dc].tailItem().getSuite() == 'c' || tableu[dc].tailItem().getSuite() == 's')) {
+						valid = false;
+					}
+					else if ((tableu[sc].tailItem().getSuite() == 'h' && tableu[sc].tailItem().getSuite() == 'd')
+						     && (tableu[dc].tailItem().getSuite() == 'd' && tableu[dc].tailItem().getSuite() == 'h')) {
+						valid = false;
+					}
+					if (!valid) {
+						cout << "Invalid Move. ";
+						continue;
+					}
+					if (tableu[sc].Size() < command.getNum()) {
+						cout << "Error in Commmand. ";
+						continue;
+					}
+					List<Card>::iter itr = tableu[sc].begin();
+					for (int i = 0; i < tableu[sc].Size() - command.getNum(); i++) {
+						++itr;
+					}
+					for (int i = 0; i < command.getNum(); i++) {
+						if (!itr.getNode()->data.isVisible()) valid = false;
+						++itr;
+					}
+					if(valid)
+						for (int i = 0; i < command.getNum(); i++) {
+							ListtoList(tableu[sc], tableu[dc]);
+							commands.Push(command);
+							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
+						}
+					else {
+						cout << "Error in Command. ";
+						continue;
+					}
+					break;
+				}
+				else if (command.getSource()[0] == 'c' && command.getDest()[0] == 'f') {
+					int sc = (command.getSource()[1] - '0') - 1;
+					int dc = (command.getDest()[1] - '0') - 1;
+					bool valid = true;
+					if (foundation[dc].isEmpty() && tableu[sc].tailItem().getRank() != 1) {
+						valid = false;
+					}
+					if (!foundation[dc].isEmpty() && tableu[sc].tailItem().getRank() != foundation[dc].topItem().getRank() + 1) {
+						valid = false;
+					}
+					if (!foundation[dc].isEmpty() && tableu[sc].tailItem().getSuite() != foundation[dc].topItem().getSuite()) {
+						valid = false;
+					}
+					if (!valid) {
+						cout << "Invalid Move. ";
+						continue;
+					}
+					if (tableu[sc].Size() < command.getNum()) {
+						cout << "Error in Commmand. ";
+						continue;
+					}
+					List<Card>::iter itr = tableu[sc].begin();
+					for (int i = 0; i < tableu[sc].Size() - command.getNum(); i++) {
+						++itr;
+					}
+					for (int i = 0; i < command.getNum(); i++) {
+						if (!itr.getNode()->data.isVisible()) valid = false;
+						++itr;
+					}
+					if (valid)
+						for (int i = 0; i < command.getNum(); i++) {
+							ListtoStack(tableu[sc], foundation[dc]);
+							commands.Push(command);
+							if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
+						}
+					else {
+						cout << "Error in Command. ";
+						continue;
+					}
+					break;
+				}
+				else if (command.getSource()[0] == 'w' && command.getDest()[0] == 'c') {
+					int dc = (command.getDest()[1] - '0') - 1;
+					bool valid = true;
+					if (tableu[dc].isEmpty()) {
+						if (waste.topItem().getRank() != 13) {
+							valid = false;
+						}
+					}
+					if (waste.topItem().getRank() != tableu[dc].tailItem().getRank() - 1) {
+						valid = false;
+					}
+					if ((waste.topItem().getSuite() == 's' || waste.topItem().getSuite() == 'c')
+						&& (tableu[dc].tailItem().getSuite() == 'c' || tableu[dc].tailItem().getSuite() == 's')) {
+						valid = false;
+					}
+					else if ((waste.topItem().getSuite() == 'h' && waste.topItem().getSuite() == 'd')
+						&& (tableu[dc].tailItem().getSuite() == 'd' && tableu[dc].tailItem().getSuite() == 'h')) {
+						valid = false;
+					}
+					if (tableu[dc].isEmpty()) {
+						if (waste.topItem().getRank() != 13) {
+							valid = false;
+							cout << "Invalid Move. ";
+							continue;
+						}
+					}
+					if (!valid) {
+						cout << "Invalid Move. ";
+						continue;
+					}
+					if (command.getNum() != 1) {
+						cout << "Error in Commmand. ";
+						continue;
+					}
+					StacktoList(waste, tableu[dc]);
+					commands.Push(command);
+					if (!waste.isEmpty()) waste.topItem().show();
+					else {
+						cout << "Error in Command. ";
+						continue;
+					}
+					break;
+				}
+				else if (command.getSource()[0] == 'w' && command.getDest()[0] == 'f') {
+					int dc = (command.getDest()[1] - '0') - 1;
+					bool valid = true;
+					if (foundation[dc].isEmpty() && waste.topItem().getRank() != 1) {
+						valid = false;
+					}
+					if (!foundation[dc].isEmpty() && waste.topItem().getRank() != foundation[dc].topItem().getRank() + 1) {
+						valid = false;
+					}
+					if (!foundation[dc].isEmpty() && waste.topItem().getSuite() != foundation[dc].topItem().getSuite()) {
+						valid = false;
+					}
+					if (!valid) {
+						cout << "Invalid Move. ";
+						continue;
+					}
+					if (waste.Size() < command.getNum()) {
+						cout << "Error in Commmand. ";
+						continue;
+					}
+					if (command.getNum() != 1) {
+						cout << "Error in Commmand. ";
+						continue;
+					}
+					StacktoStack(waste, foundation[dc]);
+					commands.Push(command);
+					if (!waste.isEmpty()) waste.topItem().show();
+					else {
+						cout << "Error in Command. ";
+						continue;
+					}
+					break;
 				}
 			}
 		}

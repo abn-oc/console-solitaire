@@ -26,9 +26,11 @@ public:
             cin.getline(temp, 19);
             command = temp[0];
             if (command == 's') {
+                if (temp[1] == '\0')
                 return;
             }
             else if (command == 'z') {
+                if(temp[1] == '\0')
                 return;
             }
             if (command == 'm') {
