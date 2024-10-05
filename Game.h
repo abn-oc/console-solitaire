@@ -53,11 +53,44 @@ public:
 			}
 		}
 	}
-	void Process(Command& command) {
+	void StacktoStack(Stack<Card>& src, Stack<Card>& des) {
+		Card drawnCard = src.Pop();
+		drawnCard.show();
+		des.Push(drawnCard);
+	}
+	void ListtoList(List<Card>& src, List<Card>& des) {
+		Card drawnCard = src.tailItem();
+		src.deleteFromEnd();
+		src.tailItem().show();
+		des.insertAtEnd(drawnCard);
+	}
+	void Process() {
+		Command command;
+		command.getInput();
 		//if(z then call undo function) - takes last command and inverts it
+		if (command.getCommand() == 'z') {
+			if (commands.Pop().getCommand() == 's') {
+				StacktoStack(waste, stock);
+			}
+		}
 		//if(s then call drawFromstock function) - pop from stock push to waste
+		if (command.getCommand() == 's') {
+			StacktoStack(stock, waste);
+			commands.Push(command);
+		}
 		//if(m) then take out source dest and num of cards
 		//call move function with source dest and num as args - check if placing is right, then do, otherwise dont
+		if (command.getCommand() == 'm') {
+			if (command.getSource()[0] == 'c' && command.getDest()[0] == 'c') {
+				int sc = (command.getSource()[1] - '0') - 1;
+				int dc = (command.getDest()[1] - '0') - 1;
+				cout << sc << dc << endl;
+				for (int i = 0; i < command.getNum(); i++) {
+					ListtoList(tableu[sc], tableu[dc]);
+					//tableu[sc].tailItem().show();
+				}
+			}
+		}
 	}
 	void Print() {
 		//first line

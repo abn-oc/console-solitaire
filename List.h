@@ -120,6 +120,10 @@ public:
 		if (head) return head->data;
 		else return T();
 	}
+	T tailItem() {
+		if (tail) return tail->data;
+		else return T();
+	}
 	iter begin() {
 		Iterator result;
 		result.itr = head;

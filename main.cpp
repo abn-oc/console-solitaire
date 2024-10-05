@@ -7,15 +7,19 @@
 using namespace std;
 
 int main() {
-	cout << "S O L I T A I R E" << endl;
-	cout << "----------------------------------------------------------------------------------------------------------\n";
 	{
 		Game solitaire;
 		solitaire.Setup();
-		solitaire.Print();
+		while (true) {
+			cout << "S O L I T A I R E" << endl;
+			cout << "----------------------------------------------------------------------------------------------------------\n";
+			solitaire.Print();
+			cout << "----------------------------------------------------------------------------------------------------------\n";
+			cout << "S O L I T A I R E" << endl;
+			solitaire.Process();
+			system("cls");
+		}
 	}
-	cout << "----------------------------------------------------------------------------------------------------------\n";
-	cout << "S O L I T A I R E" << endl;
 	cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << endl;
 	return 0;
 }
