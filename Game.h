@@ -60,8 +60,17 @@ public:
 	}
 	void ListtoList(List<Card>& src, List<Card>& des) {
 		Card drawnCard = src.tailItem();
+		//drawnCard.show();
 		src.deleteFromEnd();
-		src.tailItem().show();
+		des.insertAtEnd(drawnCard);
+	}
+	void ListtoStack(List<Card>& src, Stack<Card>& des) {
+		Card drawnCard = src.tailItem();
+		src.deleteFromEnd();
+		des.Push(drawnCard);
+	}
+	void StacktoList(Stack<Card>& src, List<Card>& des) {
+		Card drawnCard = src.Pop();
 		des.insertAtEnd(drawnCard);
 	}
 	void Process() {
@@ -69,14 +78,49 @@ public:
 		command.getInput();
 		//if(z then call undo function) - takes last command and inverts it
 		if (command.getCommand() == 'z') {
-			if (commands.Pop().getCommand() == 's') {
+			Command lastCommand = commands.Pop();
+			if (lastCommand.getCommand() == 's') {
 				StacktoStack(waste, stock);
+				if (waste.isEmpty() && !commands.isEmpty()) {
+					int len = stock.Size();
+					for (int i = 0; i < len; i++) {
+						StacktoStack(stock, waste);
+					}
+				}
+			}
+			else if (lastCommand.getCommand() == 'm') {
+				if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'c') {
+					int sc = (lastCommand.getSource()[1] - '0') - 1;
+					int dc = (lastCommand.getDest()[1] - '0') - 1;
+					for (int i = 0; i < lastCommand.getNum(); i++) {
+						if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
+						ListtoList(tableu[dc], tableu[sc]);
+					}
+				}
+				else if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'f') {
+					int sc = (lastCommand.getSource()[1] - '0') - 1;
+					int dc = (lastCommand.getDest()[1] - '0') - 1;
+					for (int i = 0; i < lastCommand.getNum(); i++) {
+						tableu[sc].tailItem().hide();
+						StacktoList(foundation[dc], tableu[sc]);
+					}
+				}
 			}
 		}
 		//if(s then call drawFromstock function) - pop from stock push to waste
 		if (command.getCommand() == 's') {
-			StacktoStack(stock, waste);
-			commands.Push(command);
+			if (stock.isEmpty()) {
+				int len = waste.Size();
+				for (int i = 0; i < len; i++) {
+					StacktoStack(waste, stock);
+				}
+				StacktoStack(stock, waste);
+				commands.Push(command);
+			}
+			else {
+				StacktoStack(stock, waste);
+				commands.Push(command);
+			}
 		}
 		//if(m) then take out source dest and num of cards
 		//call move function with source dest and num as args - check if placing is right, then do, otherwise dont
@@ -84,10 +128,27 @@ public:
 			if (command.getSource()[0] == 'c' && command.getDest()[0] == 'c') {
 				int sc = (command.getSource()[1] - '0') - 1;
 				int dc = (command.getDest()[1] - '0') - 1;
-				cout << sc << dc << endl;
 				for (int i = 0; i < command.getNum(); i++) {
+					if (!tableu[sc].tailItem().isVisible()) {
+						cout << "\nInvalid Command.";
+						return;
+					}
 					ListtoList(tableu[sc], tableu[dc]);
-					//tableu[sc].tailItem().show();
+					commands.Push(command);
+					if(!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
+				}
+			}
+			else if (command.getSource()[0] == 'c' && command.getDest()[0] == 'f') {
+				int sc = (command.getSource()[1] - '0') - 1;
+				int dc = (command.getDest()[1] - '0') - 1;
+				for (int i = 0; i < command.getNum(); i++) {
+					if (!tableu[sc].tailItem().isVisible()) {
+						cout << "\nInvalid Command.";
+						return;
+					}
+					ListtoStack(tableu[sc], foundation[dc]);
+					commands.Push(command);
+					if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
 				}
 			}
 		}
@@ -110,7 +171,7 @@ public:
 		//third line
 		if(stock.Size() == 1) cout << "(" << stock.Size() << " card)\t";
 		else cout << "(" << stock.Size() << " cards)\t";
-		if (waste.Size() == 1) cout << "(" << waste.Size() << " card)\t\t\t";
+		if (waste.Size() == 1) cout << "(" << waste.Size() << " card)\t\t";
 		else cout << "(" << waste.Size() << " cards)\t\t";
 		for (int i = 0; i < 4; i++) {
 			if (foundation[i].Size() == 1) cout << "(" << foundation[i].Size() << " card)\t";
