@@ -241,6 +241,7 @@ public:
 					int dc = (command.getDest()[1] - '0') - 1;
 					if (toFValid(tableu[sc].tailItem(), foundation[dc])) {
 						ListtoStack(tableu[sc], foundation[dc]);
+						if (!tableu[sc].isEmpty()) tableu[sc].tailItem().show();
 						commands.Push(command);
 						break;
 					}
@@ -324,6 +325,7 @@ public:
 					if (lastCommand.getSource()[0] == 'c' && lastCommand.getDest()[0] == 'f') {
 						int sc = (lastCommand.getSource()[1] - '0') - 1;
 						int dc = (lastCommand.getDest()[1] - '0') - 1;
+						if (!tableu[sc].isEmpty()) tableu[sc].tailItem().hide();
 						StacktoList(foundation[dc], tableu[sc]);
 						break;
 					}
