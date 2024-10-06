@@ -16,9 +16,10 @@ public:
 		list.deleteFromStart();
 		return temp;
 	}
-	T topItem() {
-		if (!list.isEmpty())return list.headItem();
-		else return T();
+	T& topItem() {
+		//if (!list.isEmpty())return list.headItem();
+		//else return T();
+		return list.headItem();
 	}
 	bool isEmpty() {
 		return list.isEmpty();

@@ -57,4 +57,10 @@ public:
 	int getRank() {
 		return rank;
 	}
+	bool isRed() {
+		return (suite == 'h' || suite == 'd');
+	}
+	bool isBlack() {
+		return (suite == 's' || suite == 'c');
+	}
 };

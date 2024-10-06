@@ -116,9 +116,10 @@ public:
 			delete temp;
 		}
 	}
-	T headItem() {
-		if (head) return head->data;
-		else return T();
+	T& headItem() {
+		//if (head) return head->data;
+		//else return T();
+		return head->data;
 	}
 	T& tailItem() {
 		//if (tail) return tail->data;
