@@ -29,6 +29,18 @@ public:
                 if (temp[1] == '\0')
                 return;
             }
+            else if (command == 'o') {
+                if (temp[1] == '\0')
+                    return;
+            }
+            else if (command == 'u') {
+                if (temp[1] == '\0')
+                    return;
+            }
+            else if (command == 'e') {
+                if (temp[1] == '\0')
+                    return;
+            }
             else if (command == 'z') {
                 if(temp[1] == '\0')
                 return;

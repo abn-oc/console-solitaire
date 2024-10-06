@@ -103,6 +103,20 @@ public:
 		while (1) {
 			Command command;
 			command.getInput();
+			if (command.getCommand() == 'u') {
+				Restart();
+				while (!commands.isEmpty()) commands.Pop();
+				break;
+			}
+			if (command.getCommand() == 'o') {
+				shuffleCards(deck);
+				Restart();
+				while (!commands.isEmpty()) commands.Pop();
+				break;
+			}
+			if (command.getCommand() == 'e') {
+				exit(0);
+			}
 			if (command.getCommand() == 's') {
 				if (!stock.isEmpty()) {
 					stock.topItem().show();
@@ -388,5 +402,26 @@ public:
 		return win;
 	}
 
-	//void Restart() {}
+	void Restart() {
+		for (int i = 0; i < 52; i++) deck[i].hide();
+		for (int i = 0; i < 4; i++) {
+			while (!foundation[i].isEmpty()) foundation[i].Pop();
+		}
+		for (int i = 0; i < 7; i++) {
+			while (!tableu[i].isEmpty()) tableu[i].deleteFromEnd();
+		}
+		while (!stock.isEmpty()) stock.Pop();
+		while (!waste.isEmpty()) waste.Pop();
+		int ind = 0;
+		for (int i = 0; i < 24; i++) {
+			deck[ind].hide();
+			stock.Push(deck[ind++]);
+		}
+		for (int i = 0; i < 7; i++) {
+			for (int j = 0; j <= i; j++) {
+				if (j == 0) deck[ind].show();
+				tableu[i].insertAtStart(deck[ind++]);
+			}
+		}
+	}
 };

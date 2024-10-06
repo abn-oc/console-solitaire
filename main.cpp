@@ -15,7 +15,7 @@ int main() {
 			cout << "----------------------------------------------------------------------------------------------------------\n";
 			solitaire.Print();
 			cout << "----------------------------------------------------------------------------------------------------------\n";
-			cout << "S O L I T A I R E" << endl;
+			cout << "Controls: z - undo, s - draw, m src des num - move num cards from src to des, u - undo all, o - restart, e - exit" << endl;
 			solitaire.Process();
 			system("cls");
 		}
