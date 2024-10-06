@@ -129,8 +129,10 @@ public:
 						waste.topItem().hide();
 						StacktoStack(waste, stock);
 					}
-					stock.topItem().show();
-					StacktoStack(stock, waste);
+					if (!stock.isEmpty()) {
+						stock.topItem().show();
+						StacktoStack(stock, waste);
+					}
 					commands.Push(command);
 					break;
 				}
