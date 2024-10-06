@@ -185,6 +185,10 @@ public:
 					}
 				}
 				if (command.getSource()[0] == 'w' && command.getDest()[0] == 'c') {
+					if (waste.isEmpty()) {
+						cout << "Waste Stack is Empty. ";
+						continue;
+					}
 					if (command.getNum() != 1) {
 						cout << "can ONLY move 1 card from waste to tableu columns. ";
 						continue;
@@ -205,6 +209,10 @@ public:
 					}
 				}
 				if (command.getSource()[0] == 'w' && command.getDest()[0] == 'f') {
+					if (waste.isEmpty()) {
+						cout << "Waste Stack is Empty. ";
+						continue;
+					}
 					if (command.getNum() != 1) {
 						cout << "Can ONLY move 1 card from Waste to Foundation. ";
 						continue;
