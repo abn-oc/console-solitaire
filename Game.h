@@ -201,7 +201,7 @@ public:
 					}
 					int dc = (command.getDest()[1] - '0') - 1;
 					if (toFValid(waste.topItem(), foundation[dc])) {
-						StacktoList(waste, tableu[dc]);
+						StacktoStack(waste, foundation[dc]);
 						commands.Push(command);
 						break;
 					}
@@ -379,4 +379,14 @@ public:
 			}
 		}
 	}
+
+	bool checkWin() {
+		bool win = true;
+		for (int i = 0; i < 4; i++) {
+			if (foundation[i].Size() != 13) win = false;
+		}
+		return win;
+	}
+
+	//void Restart() {}
 };

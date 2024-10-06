@@ -10,7 +10,7 @@ int main() {
 	{
 		Game solitaire;
 		solitaire.Setup();
-		while (true) {
+		while (!solitaire.checkWin()) {
 			cout << "S O L I T A I R E" << endl;
 			cout << "----------------------------------------------------------------------------------------------------------\n";
 			solitaire.Print();
@@ -19,6 +19,11 @@ int main() {
 			solitaire.Process();
 			system("cls");
 		}
+		cout << "Y O U  W I N" << endl;
+		cout << "----------------------------------------------------------------------------------------------------------\n";
+		solitaire.Print();
+		cout << "----------------------------------------------------------------------------------------------------------\n";
+		cout << "Y O U  W I N" << endl;
 	}
 	cout << "Memory Leaks: " << _CrtDumpMemoryLeaks() << endl;
 	return 0;
