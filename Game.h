@@ -75,9 +75,9 @@ public:
 
 	bool toCValid(Card c1, List<Card>& c2) {
 
-		if (c2.isEmpty() && c1.getRank() == 1) return true;
+		if (c2.isEmpty() && c1.getRank() == 13) return true;
 
-		if (c2.isEmpty() && c1.getRank() != 1) return false;
+		if (c2.isEmpty() && c1.getRank() != 13) return false;
 
 		if ((c1.getRank() == c2.tailItem().getRank() - 1) &&
 			((c1.isBlack() && c2.tailItem().isRed()) ||
