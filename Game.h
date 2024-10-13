@@ -293,7 +293,7 @@ public:
 				}
 				Command lastCommand = commands.Pop();
 				if (lastCommand.getCommand() == 's') {
-					if (waste.Size() == 1 && !commands.isEmpty()) {
+					if (waste.Size() == 1 && !commands.isEmpty() && commands.topItem().getCommand() != 'm') {
 						waste.topItem().hide();
 						StacktoStack(waste, stock);
 						while (!stock.isEmpty()) {
